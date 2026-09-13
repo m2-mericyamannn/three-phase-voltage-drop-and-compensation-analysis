@@ -3,12 +3,12 @@ clear;
 close all;
 
 projectRoot = fileparts(fileparts(mfilename('fullpath')));
-addpath(fullfile(projectRoot,'Simulink'));
+addpath(fullfile(projectRoot,'SIMULINK'));
 
 %% =========================
 % SIMULINK MODEL ADI
 %% =========================
-modelName = 'AG_gerilimDusumu_Sim';
+modelName = 'three_phase_voltage_drop';
 
 %% =========================
 % SISTEM PARAMETRELERI

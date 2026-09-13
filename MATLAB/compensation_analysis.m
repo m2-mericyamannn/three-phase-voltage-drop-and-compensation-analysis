@@ -3,10 +3,10 @@ clear;
 close all;
 
 projectRoot = fileparts(fileparts(mfilename('fullpath')));
-addpath(fullfile(projectRoot,'Simulink'));
+addpath(fullfile(projectRoot,'SIMULINK'));
 
 %% SIMULINK MODEL ADI
-modelName = 'AG_gerilimDusumuKompanzasyon_Sim';
+modelName = 'three_phase_voltage_drop_with_compensation';
 
 %% SISTEM PARAMETRELERI
 
@@ -117,9 +117,9 @@ for i = 1:n
     %% SIMULINK CIKTILARINI AL
     % Senin modelinde "out." olmadigi icin direkt isimler kullanildi.
 
-    Vsource_sim(i) = get_last_value(simOut.get('Vsource_rms1'));
-    Vload_sim(i)   = get_last_value(simOut.get('Vload_rms1'));
-    I_sim(i)       = get_last_value(simOut.get('Iload_rms1'));
+    Vsource_sim(i) = get_last_value(simOut.get('Vsource_rms'));
+    Vload_sim(i)   = get_last_value(simOut.get('Vload_rms'));
+    I_sim(i)       = get_last_value(simOut.get('Iload_rms'));
 
     DV_sim(i)  = Vsource_sim(i) - Vload_sim(i);
     DVp_sim(i) = (DV_sim(i) / Vsource_sim(i)) * 100;

@@ -3,16 +3,16 @@ clear;
 close all;
 
 projectRoot = fileparts(fileparts(mfilename('fullpath')));
-addpath(fullfile(projectRoot,'Simulink'));
+addpath(fullfile(projectRoot,'SIMULINK'));
 
 %% SIMULINK MODEL ADI
-modelName = 'AG_gerilimDusumuKompanzasyon_Sim';
+modelName = 'three_phase_voltage_drop_with_compensation';
 
 %% SENARYO SECIMI
 % 1 → cosφ 0.8
 % 2 → cosφ 0.9
 
-senaryoNo = 1;
+scenario_number = 1;
 
 %% SISTEM PARAMETRELERI
 
@@ -26,7 +26,7 @@ sim_stop_time = 0.6;
 
 %% 100 m HAT PARAMETRELERI
 
-L_km = 0.08;      % 100 m
+L_km = 0.1;       % 100 m
 
 R_km = 3.08;     % 6 mm^2
 X_km = 0.08;
@@ -37,7 +37,7 @@ L_line = X_line / (2*pi*f);
 
 %% cosphi secimi
 
-switch senaryoNo
+switch scenario_number
     case 1
         cosfi_ilk = 0.8;
     case 2
@@ -80,17 +80,17 @@ assignin('base','sim_stop_time',sim_stop_time);
 
 %% MODELI CALISTIR - SADECE KOMPANZASYONLU
 
-load_system(AG_gerilimDusumuKompanzasyon_Sim);
+load_system(modelName);
 
-simOut_comp = sim(AG_gerilimDusumuKompanzasyon_Sim, ...
+simOut_comp = sim(modelName, ...
     'StopTime', num2str(sim_stop_time), ...
     'ReturnWorkspaceOutputs', 'on');
 
 %% SIMULINK CIKTILARINI AL
 
-Vsource_comp = get_last_value(simOut_comp.get('Vsource_rms1'));
-Vload_comp   = get_last_value(simOut_comp.get('Vload_rms1'));
-I_comp       = get_last_value(simOut_comp.get('Iload_rms1'));
+Vsource_comp = get_last_value(simOut_comp.get('Vsource_rms'));
+Vload_comp   = get_last_value(simOut_comp.get('Vload_rms'));
+I_comp       = get_last_value(simOut_comp.get('Iload_rms'));
 DV_comp  = Vsource_comp - Vload_comp;
 DVp_comp = (DV_comp / Vsource_comp) * 100;
 
@@ -100,7 +100,7 @@ fprintf('\n============================================================\n');
 fprintf('100 m HAT - KOMPANZASYONLU SIMULASYON SONUCU\n');
 fprintf('============================================================\n');
 
-fprintf('Senaryo                         = %d\n', senaryoNo);
+fprintf('Senaryo                         = %d\n', scenario_number);
 fprintf('Kablo kesiti                    = 6 mm^2\n');
 fprintf('Hat uzunlugu                    = 100 m\n');
 fprintf('cos(phi) ilk                    = %.2f\n', cosfi_ilk);

@@ -3,19 +3,19 @@ clear;
 close all;
 
 projectRoot = fileparts(fileparts(mfilename('fullpath')));
-addpath(fullfile(projectRoot,'Simulink'));
+addpath(fullfile(projectRoot,'SIMULINK'));
 
 %% =========================
 % SIMULINK MODEL ADI
 %% =========================
-modelName = 'AG_gerilimDusumu_Sim';
+modelName = 'three_phase_voltage_drop';
 
 %% =========================
 % TEK SENARYO SECIMI
 %% =========================
-selected_kablo_index = 2;     % 1: 4 mm^2, 2: 6 mm^2, 3: 10 mm^2
-selected_length_m    = 80;    % 20, 40, 60, 80, 100
-selected_cosphi      = 0.8;   % 0.8, 0.9, 1.0
+selected_cable_index = 2;     % 1: 4 mm^2, 2: 6 mm^2, 3: 10 mm^2
+selected_line_length_m = 80;  % 20, 40, 60, 80, 100
+selected_power_factor = 0.8;  % 0.8, 0.9, 1.0
 
 %% =========================
 % SISTEM PARAMETRELERI
@@ -45,17 +45,17 @@ kablo(3).X = 0.08;
 %% =========================
 % SECILEN SENARYO PARAMETRELERI
 %% =========================
-cosphi = selected_cosphi;
+cosphi = selected_power_factor;
 sinphi = sqrt(1 - cosphi^2);
 phi = acos(cosphi);
 
 Q_load = P_load * tan(phi);       % toplam 3 faz reaktif guc [var]
 
-line_length_m  = selected_length_m;
+line_length_m  = selected_line_length_m;
 line_length_km = line_length_m / 1000;
 
-R_km = kablo(selected_kablo_index).R;
-X_km = kablo(selected_kablo_index).X;
+R_km = kablo(selected_cable_index).R;
+X_km = kablo(selected_cable_index).X;
 
 R_line = R_km * line_length_km;   % toplam hat direnci [ohm]
 X_line = X_km * line_length_km;   % toplam hat reaktansi [ohm]
@@ -123,7 +123,7 @@ end
 fprintf('\n============================================================\n');
 fprintf('TEK SENARYO SONUCU\n');
 fprintf('============================================================\n');
-fprintf('Kablo kesiti        = %s\n', kablo(selected_kablo_index).kesit);
+fprintf('Kablo kesiti        = %s\n', kablo(selected_cable_index).kesit);
 fprintf('Hat uzunlugu        = %d m\n', line_length_m);
 fprintf('cos(phi)            = %.2f\n', cosphi);
 fprintf('Q_load              = %.2f var\n', Q_load);

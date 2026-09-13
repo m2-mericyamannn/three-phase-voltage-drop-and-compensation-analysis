@@ -4,22 +4,22 @@
 %% ============================================================
 
 projectRoot = fileparts(fileparts(mfilename('fullpath')));
-addpath(fullfile(projectRoot,'Simulink'));
+addpath(fullfile(projectRoot,'SIMULINK'));
 
 %% GRAFIK 1:
 % Hat uzunluguna bagli gerilim dusumu
 % 6 mm^2 kablo icin cosphi degerlerinin karsilastirmasi
 
-selected_kablo_index = 2;   % 1: 4 mm^2, 2: 6 mm^2, 3: 10 mm^2
+selected_cable_index = 2;   % 1: 4 mm^2, 2: 6 mm^2, 3: 10 mm^2
 
 figure;
 hold on;
 grid on;
 box on;
 
-plot(L_m, squeeze(DVp_theory(selected_kablo_index,:,1)), '-o', 'LineWidth', 2);
-plot(L_m, squeeze(DVp_theory(selected_kablo_index,:,2)), '-s', 'LineWidth', 2);
-plot(L_m, squeeze(DVp_theory(selected_kablo_index,:,3)), '-d', 'LineWidth', 2);
+plot(L_m, squeeze(DVp_theory(selected_cable_index,:,1)), '-o', 'LineWidth', 2);
+plot(L_m, squeeze(DVp_theory(selected_cable_index,:,2)), '-s', 'LineWidth', 2);
+plot(L_m, squeeze(DVp_theory(selected_cable_index,:,3)), '-d', 'LineWidth', 2);
 
 xlabel('Hat Uzunluğu (m)');
 ylabel('Gerilim Düşümü (%)');
@@ -34,8 +34,8 @@ set(gca, 'FontSize', 11);
 % Guc faktorune bagli gerilim dusumu
 % 100 m hat uzunlugu icin farkli kablo kesitleri
 
-selected_length = 100;
-[~, idxL] = min(abs(L_m - selected_length));
+selected_line_length_m = 100;
+[~, idxL] = min(abs(L_m - selected_line_length_m));
 
 figure;
 hold on;
@@ -59,17 +59,17 @@ set(gca, 'FontSize', 11);
 % Kablo kesitine bagli gerilim dusumu
 % 100 m ve cosphi = 0.8 icin
 
-selected_length = 100;
-selected_cosphi = 0.8;
+selected_line_length_m = 100;
+selected_power_factor = 0.8;
 
-[~, idxL] = min(abs(L_m - selected_length));
-[~, idxC] = min(abs(cosphi_values - selected_cosphi));
+[~, idxL] = min(abs(L_m - selected_line_length_m));
+[~, idxC] = min(abs(cosphi_values - selected_power_factor));
 
-kesit_values = [4 6 10];
-DV_kesit = squeeze(DVp_theory(:,idxL,idxC));
+cable_cross_sections_mm2 = [4 6 10];
+voltage_drop_by_cross_section = squeeze(DVp_theory(:,idxL,idxC));
 
 figure;
-bar(kesit_values, DV_kesit);
+bar(cable_cross_sections_mm2, voltage_drop_by_cross_section);
 grid on;
 box on;
 
@@ -84,18 +84,18 @@ set(gca, 'FontSize', 11);
 % Teorik ve simulasyon karsilastirmasi
 % 6 mm^2, cosphi = 0.8 icin
 
-selected_kablo_index = 2;
-selected_cosphi = 0.8;
+selected_cable_index = 2;
+selected_power_factor = 0.8;
 
-[~, idxC] = min(abs(cosphi_values - selected_cosphi));
+[~, idxC] = min(abs(cosphi_values - selected_power_factor));
 
 figure;
 hold on;
 grid on;
 box on;
 
-plot(L_m, squeeze(DVp_theory(selected_kablo_index,:,idxC)), '-o', 'LineWidth', 2);
-plot(L_m, squeeze(DVp_sim(selected_kablo_index,:,idxC)), '-s', 'LineWidth', 2);
+plot(L_m, squeeze(DVp_theory(selected_cable_index,:,idxC)), '-o', 'LineWidth', 2);
+plot(L_m, squeeze(DVp_sim(selected_cable_index,:,idxC)), '-s', 'LineWidth', 2);
 
 xlabel('Hat Uzunluğu (m)');
 ylabel('Gerilim Düşümü (%)');
